@@ -153,6 +153,16 @@
             justify-content: center;
         }
 
+        #timerDisplay2.work-phase {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        #timerDisplay2.rest-phase {
+            background-color: #51cf66;
+            color: white;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 500px) {
             .tab-container {
@@ -336,6 +346,14 @@
             const seconds = circuitSeconds % 60;
             const phaseLabel = circuitPhase === 'work' ? 'Work' : 'Rest';
             circuitDisplay.textContent = `${phaseLabel} ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update colors based on phase
+            circuitDisplay.classList.remove('work-phase', 'rest-phase');
+            if (circuitPhase === 'work') {
+                circuitDisplay.classList.add('work-phase');
+            } else if (circuitPhase === 'rest') {
+                circuitDisplay.classList.add('rest-phase');
+            }
         }
 
         function startCircuitPhase() {
