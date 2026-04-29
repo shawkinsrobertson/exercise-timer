@@ -31,7 +31,7 @@
             position: absolute;
             top: -43px;
             left: 0;
-            z-index: 10;
+            z-index: 1;
         }
 
         .tab-button {
@@ -43,7 +43,8 @@
             font-size: 1em;
             top: 0;
             transition: all 0.3s ease;
-            z-index: 3;
+            z-index: 2;
+            position: relative;
         }
 
         .tab-button.active {
@@ -54,6 +55,7 @@
             border-bottom: none;
             z-index: 6;
             padding: 12px 24px 18px 24px;
+            position: relative;
         }
 
         .tab-button:hover {
@@ -195,6 +197,21 @@
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 10px;
+                z-index: 1;
+                margin-bottom: 0;
+            }
+
+            .tab-button {
+                z-index: 2;
+            }
+
+            .tab-button.active {
+                z-index: 6;
+            }
+
+            #timer, #timer2 {
+                position: relative;
+                z-index: 5 !important;
             }
 
             .quick-select {
