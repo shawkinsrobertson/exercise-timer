@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <title>Up Timer</title>
-     <style>
+    <title>Exercise Timer</title>
+    <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
-            gap:20px;
+            gap: 20px;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -98,6 +98,8 @@
         .quick-select {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         #thirtySecondBtn, #oneMinuteBtn, #ninetySecondBtn, 
@@ -145,231 +147,10 @@
             cursor: pointer;
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 500px) {
-            .tab-container {
-                width: 80%;
-                height: auto;
-            }
-            #timer, #timer2 {
-                position: relative;
-                width: 80%;
-                padding: 20px;
-                border-radius: 8px;
-            }
-            .tabs {
-                position: relative;
-                top: 0;
-                left: 0;
-                justify-content: center;
-            }
-
-            .quick-select {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="timer" id="timerDisplay">00:00:00</div>
-    <div><button id="startBtn">Start</button>
-    <button id="stopBtn">Stop</button>
-<button id="resetBtn">Reset</button></div>
-    <script>
-        // 1. Select the button and the display element
-const startButton = document.getElementById("startBtn");
-const stopButton = document.getElementById("stopBtn");
-const resetButton = document.getElementById("resetBtn");
-const timerDisplay = document.getElementById("timerDisplay");
-
-// 2. Initialize variables outside the function to maintain state
-let totalSeconds = 0;
-let intervalId = null;
-
-// 3. Add the click event listener
-startButton.addEventListener("click", function() {
-    // Prevent starting multiple intervals if the button is clicked repeatedly
-    if (intervalId) {
-        clearInterval(intervalId);
-    }
-
-    // 4. Start the interval only when the button is clicked
-    intervalId = setInterval(function() {
-        totalSeconds++;
-        
-        // Format the time (optional: MM:SS)
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        
-        // Update the display
-        timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        
-    }, 1000); // Run every 1000 milliseconds (1 second)
-
-    // 5. Add the stop button functionality
-    stopButton.addEventListener("click", function() {
-        clearInterval(intervalId); // Stop the interval
-        intervalId = null; // Reset the interval ID
-    });
-
-    // 6. Add the reset button functionality
-    resetButton.addEventListener("click", function() {
-        clearInterval(intervalId); // Stop the interval
-        intervalId = null; // Reset the interval ID
-        totalSeconds = 0; // Reset the total seconds
-        timerDisplay.textContent = "00:00"; // Reset the display
-    });
-});   
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <title>Up Timer</title>
-     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            gap:20px;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
-
-        .tab-container {
-            position: relative;
-            width: 400px;
-            height: 450px;
-        }
-
-        .tabs {
-            display: flex;
-            justify-content: space-between;
-            gap: 5px;
-            margin-bottom: -1px;
-            position: absolute;
-            top: -43px;
-            left: 0;
-            z-index: 10;
-        }
-
-        .tab-button {
-            padding: 12px 24px;
-            background-color: #e0e0e0;
-            border: 1px solid #007BFF;
-            border-bottom: none;
-            border-radius: 5px 5px 0 0;
-            cursor: pointer;
-            font-size: 1em;
-            transition: all 0.3s ease;
-        }
-
-        .tab-button.active {
-            background-color: #f1efef;
-            color: #007BFF;
-            font-weight: bold;
-        }
-
-        .tab-button:hover {
-            background-color: #d0d0d0;
-        }
-
-        .tab-button.active:hover {
-            background-color: #f1efef;
-        }
-
-        #timer, #timer2 {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            display: none;
-            flex-direction: column;
-            gap: 16px;
-            align-items: center;
-            border-radius: 0 8px 8px 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            background-color: #f1efef;
-            border: 1px solid #007BFF;
-        }
-
-        #timer.active, #timer2.active {
-            display: flex;
-            z-index: 5;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 1.1em;
-        }
-
-        #timerDisplay, #timerDisplay2 {
-            font-size: 2em;
-            background-color: #fff;
-            padding: 20px 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            min-width: 150px;
-            text-align: center;
-        }
-
-        .quick-select {
+        .controls {
             display: flex;
             gap: 10px;
-        }
-
-        #thirtySecondBtn, #oneMinuteBtn, #ninetySecondBtn, 
-        #thirtyThirtyBtn, #fortyTwentyBtn, #thirtyFifteenBtn, 
-        #fortyFiveFifteenBtn {
-            padding: 10px 16px;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
-            cursor: pointer;
-        }
-
-        .startBtn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
-            cursor: pointer;
-        }
-
-        .stopBtn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            background-color: #ff4800;
-            color: white;
-            cursor: pointer;
-        }
-
-        .resetBtn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            background-color: #28a745;
-            color: white;
-            cursor: pointer;
+            justify-content: center;
         }
 
         /* Responsive adjustments */
@@ -399,56 +180,251 @@ startButton.addEventListener("click", function() {
     </style>
 </head>
 <body>
-    <div class="timer" id="timerDisplay">00:00:00</div>
-    <div><button id="startBtn">Start</button>
-    <button id="stopBtn">Stop</button>
-<button id="resetBtn">Reset</button></div>
+    <div class="tab-container">
+        <div class="tabs">
+            <button class="tab-button active" data-tab="timer">Rest Timer</button>
+            <button class="tab-button" data-tab="timer2">Circuit Timer</button>
+        </div>
+
+        <!-- Rest Timer Tab -->
+        <div id="timer" class="active">
+            <h1>Rest Timer</h1>
+            <div id="timerDisplay">0:00</div>
+            <div class="quick-select">
+                <button id="thirtySecondBtn">0:30</button>
+                <button id="oneMinuteBtn">1:00</button>
+                <button id="ninetySecondBtn">1:30</button>
+            </div>
+            <div class="controls">
+                <button class="startBtn">Start</button>
+                <button class="stopBtn">Stop</button>
+                <button class="resetBtn">Reset</button>
+            </div>
+        </div>
+
+        <!-- Circuit Timer Tab -->
+        <div id="timer2">
+            <h1>Circuit Timer</h1>
+            <div id="timerDisplay2">0:00</div>
+            <div class="quick-select">
+                <button id="thirtyThirtyBtn">30:30</button>
+                <button id="fortyTwentyBtn">40:20</button>
+                <button id="thirtyFifteenBtn">30:15</button>
+                <button id="fortyFiveFifteenBtn">45:15</button>
+            </div>
+            <div class="controls">
+                <button class="startBtn">Start</button>
+                <button class="stopBtn">Stop</button>
+                <button class="resetBtn">Reset</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 1. Select the button and the display element
-const startButton = document.getElementById("startBtn");
-const stopButton = document.getElementById("stopBtn");
-const resetButton = document.getElementById("resetBtn");
-const timerDisplay = document.getElementById("timerDisplay");
+        // Tab switching functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and tabs
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('#timer, #timer2').forEach(tab => tab.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding tab
+                this.classList.add('active');
+                document.getElementById(tabName).classList.add('active');
+            });
+        });
 
-// 2. Initialize variables outside the function to maintain state
-let totalSeconds = 0;
-let intervalId = null;
+        // ===== REST TIMER (Timer 1) =====
+        let restTimerSeconds = 0;
+        let restIntervalId = null;
+        let restTimerMode = null; // 'count-down' or 'count-up'
+        const restDisplay = document.querySelector('#timer #timerDisplay');
+        const restStartBtn = document.querySelector('#timer .startBtn');
+        const restStopBtn = document.querySelector('#timer .stopBtn');
+        const restResetBtn = document.querySelector('#timer .resetBtn');
 
-// 3. Add the click event listener
-startButton.addEventListener("click", function() {
-    // Prevent starting multiple intervals if the button is clicked repeatedly
-    if (intervalId) {
-        clearInterval(intervalId);
-    }
+        function updateRestDisplay() {
+            const minutes = Math.floor(restTimerSeconds / 60);
+            const seconds = restTimerSeconds % 60;
+            restDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
 
-    // 4. Start the interval only when the button is clicked
-    intervalId = setInterval(function() {
-        totalSeconds++;
-        
-        // Format the time (optional: MM:SS)
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        
-        // Update the display
-        timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        
-    }, 1000); // Run every 1000 milliseconds (1 second)
+        // Rest timer preset buttons
+        document.getElementById('thirtySecondBtn').addEventListener('click', () => {
+            if (restIntervalId) clearInterval(restIntervalId);
+            restIntervalId = null;
+            restTimerSeconds = 30;
+            restTimerMode = 'count-down';
+            updateRestDisplay();
+        });
 
-    // 5. Add the stop button functionality
-    stopButton.addEventListener("click", function() {
-        clearInterval(intervalId); // Stop the interval
-        intervalId = null; // Reset the interval ID
-    });
+        document.getElementById('oneMinuteBtn').addEventListener('click', () => {
+            if (restIntervalId) clearInterval(restIntervalId);
+            restIntervalId = null;
+            restTimerSeconds = 60;
+            restTimerMode = 'count-down';
+            updateRestDisplay();
+        });
 
-    // 6. Add the reset button functionality
-    resetButton.addEventListener("click", function() {
-        clearInterval(intervalId); // Stop the interval
-        intervalId = null; // Reset the interval ID
-        totalSeconds = 0; // Reset the total seconds
-        timerDisplay.textContent = "00:00"; // Reset the display
-    });
-});   
+        document.getElementById('ninetySecondBtn').addEventListener('click', () => {
+            if (restIntervalId) clearInterval(restIntervalId);
+            restIntervalId = null;
+            restTimerSeconds = 90;
+            restTimerMode = 'count-down';
+            updateRestDisplay();
+        });
+
+        restStartBtn.addEventListener('click', () => {
+            if (restIntervalId) clearInterval(restIntervalId);
+            
+            // If no preset selected, count up
+            if (restTimerMode === null) {
+                restTimerMode = 'count-up';
+            }
+
+            if (restTimerMode === 'count-down') {
+                restIntervalId = setInterval(() => {
+                    if (restTimerSeconds > 0) {
+                        restTimerSeconds--;
+                        updateRestDisplay();
+                    } else {
+                        clearInterval(restIntervalId);
+                        restIntervalId = null;
+                        restTimerMode = null;
+                    }
+                }, 1000);
+            } else if (restTimerMode === 'count-up') {
+                restIntervalId = setInterval(() => {
+                    restTimerSeconds++;
+                    updateRestDisplay();
+                }, 1000);
+            }
+        });
+
+        restStopBtn.addEventListener('click', () => {
+            if (restIntervalId) {
+                clearInterval(restIntervalId);
+                restIntervalId = null;
+            }
+        });
+
+        restResetBtn.addEventListener('click', () => {
+            if (restIntervalId) {
+                clearInterval(restIntervalId);
+                restIntervalId = null;
+            }
+            restTimerSeconds = 0;
+            restTimerMode = null;
+            updateRestDisplay();
+        });
+
+        // ===== CIRCUIT TIMER (Timer 2) =====
+        let circuitIntervalId = null;
+        let circuitSeconds = 0;
+        let circuitPhase = null; // 'work' or 'rest'
+        let circuitWorkTime = 0;
+        let circuitRestTime = 0;
+        const circuitDisplay = document.querySelector('#timer2 #timerDisplay2');
+        const circuitStartBtn = document.querySelector('#timer2 .startBtn');
+        const circuitStopBtn = document.querySelector('#timer2 .stopBtn');
+        const circuitResetBtn = document.querySelector('#timer2 .resetBtn');
+
+        function updateCircuitDisplay() {
+            const minutes = Math.floor(circuitSeconds / 60);
+            const seconds = circuitSeconds % 60;
+            const phaseLabel = circuitPhase === 'work' ? 'Work' : 'Rest';
+            circuitDisplay.textContent = `${phaseLabel} ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startCircuitPhase() {
+            if (circuitPhase === 'work') {
+                circuitSeconds = circuitWorkTime;
+            } else if (circuitPhase === 'rest') {
+                circuitSeconds = circuitRestTime;
+            }
+            updateCircuitDisplay();
+
+            circuitIntervalId = setInterval(() => {
+                if (circuitSeconds > 0) {
+                    circuitSeconds--;
+                    updateCircuitDisplay();
+                } else {
+                    // Switch phase
+                    if (circuitPhase === 'work') {
+                        circuitPhase = 'rest';
+                    } else {
+                        circuitPhase = 'work';
+                    }
+                    startCircuitPhase();
+                }
+            }, 1000);
+        }
+
+        // Circuit timer preset buttons
+        document.getElementById('thirtyThirtyBtn').addEventListener('click', () => {
+            if (circuitIntervalId) clearInterval(circuitIntervalId);
+            circuitIntervalId = null;
+            circuitWorkTime = 30;
+            circuitRestTime = 30;
+            circuitPhase = 'work';
+            circuitSeconds = circuitWorkTime;
+            updateCircuitDisplay();
+        });
+
+        document.getElementById('fortyTwentyBtn').addEventListener('click', () => {
+            if (circuitIntervalId) clearInterval(circuitIntervalId);
+            circuitIntervalId = null;
+            circuitWorkTime = 40;
+            circuitRestTime = 20;
+            circuitPhase = 'work';
+            circuitSeconds = circuitWorkTime;
+            updateCircuitDisplay();
+        });
+
+        document.getElementById('thirtyFifteenBtn').addEventListener('click', () => {
+            if (circuitIntervalId) clearInterval(circuitIntervalId);
+            circuitIntervalId = null;
+            circuitWorkTime = 30;
+            circuitRestTime = 15;
+            circuitPhase = 'work';
+            circuitSeconds = circuitWorkTime;
+            updateCircuitDisplay();
+        });
+
+        document.getElementById('fortyFiveFifteenBtn').addEventListener('click', () => {
+            if (circuitIntervalId) clearInterval(circuitIntervalId);
+            circuitIntervalId = null;
+            circuitWorkTime = 45;
+            circuitRestTime = 15;
+            circuitPhase = 'work';
+            circuitSeconds = circuitWorkTime;
+            updateCircuitDisplay();
+        });
+
+        circuitStartBtn.addEventListener('click', () => {
+            if (circuitPhase && !circuitIntervalId) {
+                startCircuitPhase();
+            }
+        });
+
+        circuitStopBtn.addEventListener('click', () => {
+            if (circuitIntervalId) {
+                clearInterval(circuitIntervalId);
+                circuitIntervalId = null;
+            }
+        });
+
+        circuitResetBtn.addEventListener('click', () => {
+            if (circuitIntervalId) {
+                clearInterval(circuitIntervalId);
+                circuitIntervalId = null;
+            }
+            circuitSeconds = 0;
+            circuitPhase = null;
+            circuitDisplay.textContent = '0:00';
+        });
     </script>
 </body>
 </html>
