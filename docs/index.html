@@ -50,6 +50,7 @@
             font-weight: bold;
             border:#003771 solid 2px;
             border-bottom: none;
+            
         }
 
         .tab-button:hover {
@@ -65,7 +66,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            display: none;
+            display: flex;
             flex-direction: column;
             gap: 16px;
             align-items: center;
@@ -73,14 +74,17 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             background-color: #f1efef;
-            
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 4;
+            border: 2px solid #003771;
         }
 
         #timer.active, #timer2.active {
-            display: flex;
+            opacity: 1;
+            visibility: visible;
             z-index: 5;
-            border: 2px solid #003771;
-           
         }
 
         h1 {
