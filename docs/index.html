@@ -37,7 +37,6 @@
         .tab-button {
             padding: 12px 24px;
             background-color: #e0e0e0;
-            border: 1px solid #007BFF;
             border-bottom: none;
             border-radius: 5px 5px 0 0;
             cursor: pointer;
@@ -47,8 +46,10 @@
 
         .tab-button.active {
             background-color: #f1efef;
-            color: #007BFF;
+            color: #003771;
             font-weight: bold;
+            border:#003771 solid 2px;
+            border-bottom: none;
         }
 
         .tab-button:hover {
@@ -72,12 +73,14 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             background-color: #f1efef;
-            border: 1px solid #007BFF;
+            
         }
 
         #timer.active, #timer2.active {
             display: flex;
             z-index: 5;
+            border: 2px solid #003771;
+           
         }
 
         h1 {
@@ -198,7 +201,6 @@
 
         <!-- Rest Timer Tab -->
         <div id="timer" class="active">
-            <h1>Rest Timer</h1>
             <div id="timerDisplay">0:00</div>
             <div class="quick-select">
                 <button id="thirtySecondBtn">0:30</button>
@@ -214,7 +216,6 @@
 
         <!-- Circuit Timer Tab -->
         <div id="timer2">
-            <h1>Circuit Timer</h1>
             <div id="timerDisplay2">0:00</div>
             <div class="quick-select">
                 <button id="thirtyThirtyBtn">30:30</button>
