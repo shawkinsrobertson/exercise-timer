@@ -1,11 +1,17 @@
-# UP-TIMER
+# Exercise Timer
 
 
-A simple timer that counts up from a button press. 
+A simple exercise rest and circuit timer for the web browser. Mobile-friendly. 
 
 
-- Timer that records in HH:MM:SS
-- Three buttons: start, stop, and reset
+- Two timers: Rest and Circuit
+- Rest timer has quick select options: 0:30, 1:00, and 1:30.
+- Circuit timer has quick select options: 30:30, 40:20, 30:15, and 45:15.
+
+## Coming Soon
+
+- Ability to set number of rounds for circuit timer
+- Additional quick selects OR ability to manually set custom rest time
 
 
-I made this because I wanted something I could integrate into Notion or any other project flow and record time spent on a given task. Simple and can be used in any browser.
+I made this because I wanted something I could integrate into Notion for my training clients. 
