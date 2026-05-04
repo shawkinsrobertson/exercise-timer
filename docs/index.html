@@ -294,6 +294,8 @@
 
         [countdownBeepSound, timerStartSound, workStartSound, restStartSound, restEndSound].forEach(sound => {
             sound.preload = 'auto';
+            sound.addEventListener('canplaythrough', () => console.log('Audio loaded:', sound.src));
+            sound.addEventListener('error', (e) => console.log('Audio load error for', sound.src, e));
         });
 
         let circuitCountdownId = null;
@@ -301,10 +303,18 @@
         function playSound(audio) {
             if (!audio) return;
             try {
+                console.log('Attempting to play sound:', audio.src);
                 audio.currentTime = 0;
-                audio.play();
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        console.log('Sound played successfully');
+                    }).catch(error => {
+                        console.log('Sound play failed:', error.message);
+                    });
+                }
             } catch (error) {
-                // Ignore audio playback errors if the browser blocks autoplay policies
+                console.log('Sound play error:', error.message);
             }
         }
 
@@ -316,6 +326,7 @@
         }
 
         function startCircuitCountdown() {
+            console.log('Circuit countdown started, phase:', circuitPhase);
             stopCircuitCountdown();
             let remainingBeepCount = 3;
 
@@ -323,6 +334,7 @@
             remainingBeepCount--;
 
             circuitCountdownId = setInterval(() => {
+                console.log('Circuit countdown tick, remaining:', remainingBeepCount);
                 if (remainingBeepCount > 0) {
                     playSound(countdownBeepSound);
                     remainingBeepCount--;
@@ -355,6 +367,7 @@
             restIntervalId = null;
             restTimerSeconds = 30;
             restTimerMode = 'count-down';
+            restStartBtn.textContent = 'Start';
             updateRestDisplay();
         });
 
@@ -363,6 +376,7 @@
             restIntervalId = null;
             restTimerSeconds = 60;
             restTimerMode = 'count-down';
+            restStartBtn.textContent = 'Start';
             updateRestDisplay();
         });
 
@@ -371,26 +385,40 @@
             restIntervalId = null;
             restTimerSeconds = 90;
             restTimerMode = 'count-down';
+            restStartBtn.textContent = 'Start';
             updateRestDisplay();
         });
 
         restStartBtn.addEventListener('click', () => {
-            if (restIntervalId) clearInterval(restIntervalId);
-            
+            if (restIntervalId) {
+                clearInterval(restIntervalId);
+                restIntervalId = null;
+                restStartBtn.textContent = 'Start';
+                return;
+            }
+
             // If no preset selected, count up
             if (restTimerMode === null) {
                 restTimerMode = 'count-up';
             }
+
+            playSound(timerStartSound);
+            restStartBtn.textContent = 'Pause';
 
             if (restTimerMode === 'count-down') {
                 restIntervalId = setInterval(() => {
                     if (restTimerSeconds > 0) {
                         restTimerSeconds--;
                         updateRestDisplay();
+                        if (restTimerSeconds > 0 && restTimerSeconds <= 3) {
+                            playSound(countdownBeepSound);
+                        }
                     } else {
                         clearInterval(restIntervalId);
                         restIntervalId = null;
                         restTimerMode = null;
+                        restStartBtn.textContent = 'Start';
+                        playSound(restEndSound);
                     }
                 }, 1000);
             } else if (restTimerMode === 'count-up') {
@@ -406,6 +434,7 @@
                 clearInterval(restIntervalId);
                 restIntervalId = null;
             }
+            restStartBtn.textContent = 'Start';
         });
 
         restResetBtn.addEventListener('click', () => {
@@ -415,6 +444,7 @@
             }
             restTimerSeconds = 0;
             restTimerMode = null;
+            restStartBtn.textContent = 'Start';
             updateRestDisplay();
         });
 
@@ -516,12 +546,20 @@
         });
 
         circuitStartBtn.addEventListener('click', () => {
+            console.log('Circuit Start clicked', {
+                circuitPhase,
+                circuitIntervalId,
+                circuitCountdownId
+            });
             if (circuitPhase && !circuitIntervalId && !circuitCountdownId) {
                 startCircuitCountdown();
+            } else if (!circuitPhase) {
+                console.log('Circuit start blocked because no preset is selected.');
             }
         });
 
         circuitStopBtn.addEventListener('click', () => {
+            console.log('Circuit Stop clicked');
             if (circuitIntervalId) {
                 clearInterval(circuitIntervalId);
                 circuitIntervalId = null;
