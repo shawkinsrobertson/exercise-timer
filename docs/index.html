@@ -278,12 +278,60 @@
                 // Stop any running timers when switching tabs
                 clearInterval(restIntervalId);
                 clearInterval(circuitIntervalId);
+                clearInterval(circuitCountdownId);
                 restIntervalId = null;
                 circuitIntervalId = null;
+                circuitCountdownId = null;
             });
         });
 
-        // ...existing code...
+        const countdownBeepSound = new Audio('sounds/countdown-beep.mp3');
+        const timerStartSound = new Audio('sounds/timer-start.mp3');
+        const workStartSound = new Audio('sounds/work-start.mp3');
+        const restStartSound = new Audio('sounds/rest-start.mp3');
+        const restEndSound = new Audio('sounds/rest-end.mp3');
+
+        [countdownBeepSound, timerStartSound, workStartSound, restStartSound, restEndSound].forEach(sound => {
+            sound.preload = 'auto';
+        });
+
+        let circuitCountdownId = null;
+
+        function playSound(audio) {
+            if (!audio) return;
+            try {
+                audio.currentTime = 0;
+                audio.play();
+            } catch (error) {
+                // Ignore audio playback errors if the browser blocks autoplay policies
+            }
+        }
+
+        function stopCircuitCountdown() {
+            if (circuitCountdownId) {
+                clearInterval(circuitCountdownId);
+                circuitCountdownId = null;
+            }
+        }
+
+        function startCircuitCountdown() {
+            stopCircuitCountdown();
+            let remainingBeepCount = 3;
+
+            playSound(countdownBeepSound);
+            remainingBeepCount--;
+
+            circuitCountdownId = setInterval(() => {
+                if (remainingBeepCount > 0) {
+                    playSound(countdownBeepSound);
+                    remainingBeepCount--;
+                } else {
+                    stopCircuitCountdown();
+                    playSound(timerStartSound);
+                    startCircuitPhase();
+                }
+            }, 1000);
+        }
 
         // ===== REST TIMER (Timer 1) =====
         let restTimerSeconds = 0;
@@ -398,8 +446,10 @@
         function startCircuitPhase() {
             if (circuitPhase === 'work') {
                 circuitSeconds = circuitWorkTime;
+                playSound(workStartSound);
             } else if (circuitPhase === 'rest') {
                 circuitSeconds = circuitRestTime;
+                playSound(restStartSound);
             }
             updateCircuitDisplay();
 
@@ -408,13 +458,17 @@
                     circuitSeconds--;
                     updateCircuitDisplay();
                 } else {
-                    // Switch phase
+                    clearInterval(circuitIntervalId);
+                    circuitIntervalId = null;
+
                     if (circuitPhase === 'work') {
                         circuitPhase = 'rest';
+                        startCircuitPhase();
                     } else {
+                        playSound(restEndSound);
                         circuitPhase = 'work';
+                        setTimeout(startCircuitPhase, 300);
                     }
-                    startCircuitPhase();
                 }
             }, 1000);
         }
@@ -461,8 +515,8 @@
         });
 
         circuitStartBtn.addEventListener('click', () => {
-            if (circuitPhase && !circuitIntervalId) {
-                startCircuitPhase();
+            if (circuitPhase && !circuitIntervalId && !circuitCountdownId) {
+                startCircuitCountdown();
             }
         });
 
@@ -471,6 +525,7 @@
                 clearInterval(circuitIntervalId);
                 circuitIntervalId = null;
             }
+            stopCircuitCountdown();
         });
 
         circuitResetBtn.addEventListener('click', () => {
@@ -478,6 +533,7 @@
                 clearInterval(circuitIntervalId);
                 circuitIntervalId = null;
             }
+            stopCircuitCountdown();
             circuitSeconds = 0;
             circuitPhase = null;
             circuitDisplay.textContent = '0:00';
