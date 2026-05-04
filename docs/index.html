@@ -285,11 +285,12 @@
             });
         });
 
-        const countdownBeepSound = new Audio('sounds/countdown-beep.mp3');
-        const timerStartSound = new Audio('sounds/timer-start.mp3');
-        const workStartSound = new Audio('sounds/work-start.mp3');
-        const restStartSound = new Audio('sounds/rest-start.mp3');
-        const restEndSound = new Audio('sounds/rest-end.mp3');
+        // Initialize audio elements
+        const countdownBeepSound = new Audio('sounds/countdown-sound.mp3');
+        const timerStartSound = new Audio('sounds/rest-timer-begin.mp3');
+        const workStartSound = new Audio('sounds/work-interval-sound.mp3');
+        const restStartSound = new Audio('sounds/rest-interval-sound.mp3');
+        const restEndSound = new Audio('sounds/rest-timer-end.mp3');
 
         [countdownBeepSound, timerStartSound, workStartSound, restStartSound, restEndSound].forEach(sound => {
             sound.preload = 'auto';
