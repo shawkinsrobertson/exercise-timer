@@ -350,6 +350,7 @@
         let restTimerSeconds = 0;
         let restIntervalId = null;
         let restTimerMode = null; // 'count-down' or 'count-up'
+        let restTimerRunning = false;
         const restDisplay = document.querySelector('#timer #timerDisplay');
         const restStartBtn = document.querySelector('#timer .startBtn');
         const restStopBtn = document.querySelector('#timer .stopBtn');
@@ -361,39 +362,40 @@
             restDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
         }
 
+        function stopRestTimer() {
+            if (restIntervalId) {
+                clearInterval(restIntervalId);
+                restIntervalId = null;
+            }
+            restTimerRunning = false;
+            restStartBtn.textContent = 'Start';
+        }
+
         // Rest timer preset buttons
         document.getElementById('thirtySecondBtn').addEventListener('click', () => {
-            if (restIntervalId) clearInterval(restIntervalId);
-            restIntervalId = null;
+            stopRestTimer();
             restTimerSeconds = 30;
             restTimerMode = 'count-down';
-            restStartBtn.textContent = 'Start';
             updateRestDisplay();
         });
 
         document.getElementById('oneMinuteBtn').addEventListener('click', () => {
-            if (restIntervalId) clearInterval(restIntervalId);
-            restIntervalId = null;
+            stopRestTimer();
             restTimerSeconds = 60;
             restTimerMode = 'count-down';
-            restStartBtn.textContent = 'Start';
             updateRestDisplay();
         });
 
         document.getElementById('ninetySecondBtn').addEventListener('click', () => {
-            if (restIntervalId) clearInterval(restIntervalId);
-            restIntervalId = null;
+            stopRestTimer();
             restTimerSeconds = 90;
             restTimerMode = 'count-down';
-            restStartBtn.textContent = 'Start';
             updateRestDisplay();
         });
 
         restStartBtn.addEventListener('click', () => {
-            if (restIntervalId) {
-                clearInterval(restIntervalId);
-                restIntervalId = null;
-                restStartBtn.textContent = 'Start';
+            if (restTimerRunning) {
+                stopRestTimer();
                 return;
             }
 
@@ -403,6 +405,7 @@
             }
 
             playSound(timerStartSound);
+            restTimerRunning = true;
             restStartBtn.textContent = 'Pause';
 
             if (restTimerMode === 'count-down') {
@@ -414,10 +417,8 @@
                             playSound(countdownBeepSound);
                         }
                     } else {
-                        clearInterval(restIntervalId);
-                        restIntervalId = null;
+                        stopRestTimer();
                         restTimerMode = null;
-                        restStartBtn.textContent = 'Start';
                         playSound(restEndSound);
                     }
                 }, 1000);
@@ -430,11 +431,7 @@
         });
 
         restStopBtn.addEventListener('click', () => {
-            if (restIntervalId) {
-                clearInterval(restIntervalId);
-                restIntervalId = null;
-            }
-            restStartBtn.textContent = 'Start';
+            stopRestTimer();
         });
 
         restResetBtn.addEventListener('click', () => {
@@ -496,7 +493,6 @@
                         circuitPhase = 'rest';
                         startCircuitPhase();
                     } else {
-                        playSound(restEndSound);
                         circuitPhase = 'work';
                         setTimeout(startCircuitPhase, 300);
                     }
